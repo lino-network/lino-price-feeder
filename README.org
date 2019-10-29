@@ -1,0 +1,57 @@
+* Lino Price Feeder
+This is a simple implementation of a lino price feeder. It queries the price from multiple exchanges, 
+and take a median price of all.
+
+* Usage
+** Build
+#+begin_src bash
+make build
+./bin/lino-price-feeder
+#+end_src
+
+** Print Current Prices
+Example:
+#+begin_src base
+./bin/lino-price-feeder price --config example.config.json
+#+end_src
+
+** Feed
+Example:
+#+begin_src base
+$ ./bin/lino-price-feeder feed validatorX --config example.config.json --priv-key @validatorX.key
+Password of validatorX.key: 
+#+end_src
+
+* Configuration
+An example config:
+#+begin_src js
+{
+  "chain_id": "lino-testnet-upgrade5",
+  "node_url": "tcp://18.213.116.0:26657",
+  "max_tx_fee_lino": "0.5",
+  "max_retry": 10,
+  "retry_interval_sec": 20,
+  "feed_every_sec": 650,
+  "rest_api_list": [
+    {
+      "name": "binance",
+      "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+      "json_path": "price"
+    },
+    {
+      "name": "huobi",
+      "endpoint": "https://api.huobi.pro/market/trade?symbol=btcusdt",
+      "json_path": "tick.data.0.price"
+    },
+    {
+      "name": "coinbase",
+      "endpoint": "https://api.coinbase.com/v2/prices/BTC-USD/spot",
+      "json_path": "data.amount"
+    }
+  ]
+}
+#+end_src
+
+This config queries the BTC-USD price from binance, huobi, and coinbase for example. It will
+feed price to the blockchain every 650 seconds. When feediing faield, it will retry every 20
+seconds, and it will panic if there are 10 errors in a row. The maximum transaction fee is 0.5 lino.

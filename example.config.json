@@ -1,0 +1,25 @@
+{
+  "chain_id": "lino-testnet-upgrade5",
+  "node_url": "tcp://localhost:26657",
+  "max_tx_fee_lino": "0.5",
+  "max_retry": 10,
+  "retry_interval_sec": 20,
+  "feed_every_sec": 650,
+  "rest_api_list": [
+    {
+      "name": "binance",
+      "endpoint": "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",
+      "json_path": "price"
+    },
+    {
+      "name": "huobi",
+      "endpoint": "https://api.huobi.pro/market/trade?symbol=btcusdt",
+      "json_path": "tick.data.0.price"
+    },
+    {
+      "name": "coinbase",
+      "endpoint": "https://api.coinbase.com/v2/prices/BTC-USD/spot",
+      "json_path": "data.amount"
+    }
+  ]
+}
