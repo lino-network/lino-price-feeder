@@ -53,9 +53,8 @@ For syntax of `json_path`, check: https://github.com/tidwall/gjson.
 }
 #+end_src
 
-This config 
 ** Print Current Prices
-Example:
+The `price` command will print the current prices queried from endpoints in the configuration.
 #+begin_src base
 ./bin/lino-price-feeder price --config example.config.json
 #+end_src
