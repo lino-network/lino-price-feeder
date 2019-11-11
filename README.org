@@ -1,29 +1,30 @@
 * Lino Price Feeder
-This is a simple implementation of a lino price feeder. It queries the price from multiple exchanges, 
+This is a simple and naive implementation of a lino price feeder.
+It queries the price from multiple exchanges,
 and take a median price of all.
 
+We recommand validators to run this feeder in an isolated enviroment, with connections to
+trusted nodes only. The security policy should not allow any in-bound connection.
+
 * Usage
+** Dependency
++ go version >= 1.12
+
 ** Build
 #+begin_src bash
 make build
 ./bin/lino-price-feeder
 #+end_src
 
-** Print Current Prices
-Example:
-#+begin_src base
-./bin/lino-price-feeder price --config example.config.json
-#+end_src
+** Configuration
+You can configure the behavior of the feeder by changing the configure file. The file below is 
+an example configuration file that queries the BTC-USD price from binance, huobi, and coinbase for 
+example. It will feed price to the blockchain every 650 seconds. 
+When feediing faield, it will retry every 20 seconds, 
+and it will panic if there are 10 errors in a row. The maximum transaction fee is 0.5 lino.
 
-** Feed
-Example:
-#+begin_src base
-$ ./bin/lino-price-feeder feed validatorX --config example.config.json --priv-key @validatorX.key
-Password of validatorX.key: 
-#+end_src
-
-* Configuration
-An example config:
+You can add your own price endpoint by adding an item, (name, endpoint, json_path), in `rest_api_list`.
+For syntax of `json_path`, check: https://github.com/tidwall/gjson.
 #+begin_src js
 {
   "chain_id": "lino-testnet-upgrade5",
@@ -52,6 +53,26 @@ An example config:
 }
 #+end_src
 
-This config queries the BTC-USD price from binance, huobi, and coinbase for example. It will
-feed price to the blockchain every 650 seconds. When feediing faield, it will retry every 20
-seconds, and it will panic if there are 10 errors in a row. The maximum transaction fee is 0.5 lino.
+This config 
+** Print Current Prices
+Example:
+#+begin_src base
+./bin/lino-price-feeder price --config example.config.json
+#+end_src
+
+** Feed Price
+Example:
+#+begin_src bash
+$ ./bin/lino-price-feeder feed validatorX --config example.config.json --priv-key @validatorX.key
+Password of validatorX.key: 
+#+end_src
+
+If you haven't generated an encrypted key file yet, you need to use `linocli` to get one.
+#+begin_src bash
+$ linocli encrypt-key myvalidator.key
+Hex-encoded Private key: 
+Password: 
+Password again: 
+
+encrypted key have been wrote to myvalidator.key.
+#+end_src

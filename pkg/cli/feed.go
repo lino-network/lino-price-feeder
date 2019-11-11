@@ -88,8 +88,7 @@ func (f Feeder) feed() error {
 
 	// skip if has fed recently.
 	now := time.Now().Unix()
-	if last != nil && time.Now().Sub(time.Unix(last.UpdateAt, 0)) <
-		time.Duration(f.cfg.FeedEverySec)*time.Second {
+	if last != nil && now-last.UpdateAt < f.cfg.FeedEverySec {
 		fmt.Printf("now(%d) - %s's last feed time(%d) = %d <= %d seconds, skipped.\n",
 			now, f.username, last.UpdateAt, now-last.UpdateAt, f.cfg.FeedEverySec)
 		return nil

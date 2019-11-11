@@ -100,11 +100,11 @@ func GetFeedCmd() *cobra.Command {
 func addConfigFlag(cmd *cobra.Command, configPath *string) {
 	// config
 	cmd.Flags().StringVar(configPath, FlagConfig, "c", "config file path of price feeder")
-	cmd.MarkFlagRequired(FlagConfig)
+	_ = cmd.MarkFlagRequired(FlagConfig)
 }
 
 func addKeyFlag(cmd *cobra.Command, keyPath *string) {
 	// secrets
 	cmd.Flags().StringVar(keyPath, FlagKey, "", "encrypted private key file path")
-	cmd.MarkFlagRequired(FlagKey)
+	_ = cmd.MarkFlagRequired(FlagKey)
 }
